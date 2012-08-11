@@ -1,0 +1,9 @@
+As I was reading Kernighan and Ritchie's *The C Programming Language*, I felt 
+like I was learning the syntax and other superficial things, but not learning 
+the more practical lessons that I was sure I'd run into once I tried to make 
+something. So I chose to do the exercises. I didn't start until the middle of 
+Chapter 1, but better late than never!
+
+If you have suggestions or pointers, message me! I really want to learn C "the 
+right way". It's a fascinating, spartan, pretty language, and I want to become 
+good with it.
