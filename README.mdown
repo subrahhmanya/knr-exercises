@@ -1,9 +1,15 @@
-As I was reading Kernighan and Ritchie's *The C Programming Language*, I felt 
-like I was learning the syntax and other superficial things, but not learning 
-the more practical lessons that I was sure I'd run into once I tried to make 
-something. So I chose to do the exercises. I didn't start until the middle of 
-Chapter 1, but better late than never!
+These files are my solutions to Kernighan and Ritchie's *The C Programming 
+Language, 2nd Edition*. My aim is to deepen my understanding of C, using only 
+the concepts covered in content that comes before each exercise. That means no 
+"cheating" by using standard library features that aren't been covered in the 
+book yet. As a result, many of my solutions will probably not be "the best", but 
+suitable for the goal at hand: *learning*.
 
-If you have suggestions or pointers, message me! I really want to learn C "the 
-right way". It's a fascinating, spartan, pretty language, and I want to become 
-good with it.
+I chose this route because as I was reading the K&R, I didn't feel like I was 
+learning anything new, but I knew C was known for its simplicity and efficiency. 
+If I wasn't learning anything about efficiency and simplifying my programs, then 
+why was I learning C? I tackled a few exercises and found that I was beginning 
+to learn a few things I hadn't ran into before.
+
+Critique is welcome, but please keep in mind the limitations I've outlined in 
+the first paragraph.

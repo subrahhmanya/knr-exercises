@@ -15,30 +15,41 @@
 #define TABWIDTH 8
 
 int main(void) {
-	int c, spaces;
-	spaces = 0;
+	int column, c, spaces;
+	spaces = column = 0;
 	while ((c = getchar()) != EOF) {
-		// Make sure the character is a space...
+		// First thing's first, advance by a column.
+		column++;
+
 		if (c == ' ') {
-			++spaces;
-			// When spaces is equal to TABWIDTH, we can add a tab
-			if (spaces == TABWIDTH) {
+			/* Add to 'spaces' immediately, we'll decide if it needs to be
+			 * output later.
+			 */
+			spaces++;
+
+			if (column % TABWIDTH == 0 && spaces > 0) {
 				putchar('\t');
+				spaces = 0; // No spaces are left when we tab!
+			}
+
+		} else {
+			/* Be sure to output any leftover spaces when we come across a
+			 * non-space character. This should allow for spaces between words
+			 * that don't fall along the tabstop lines.
+			 */
+
+			while (spaces > 0) {
+				putchar(' ');
+				spaces--;
+			}
+
+			// As usual, reset things on a newline.
+			if (c == '\n') {
+				column = 0;
 				spaces = 0;
 			}
-		} else {
-			/* As soon as we hit a non-space character, we need to make sure
-			 * there aren't 1-7 spaces leftover. These need to be output before
-			 * we output the non-space character itself! This little loop is
-			 * interesting because it solves the problem of leftover spaces
-			 * _and_ gets the 'spaces' back to zero, which it needs to be once
-			 * we hit a non-space character.
-			 */
-			while (spaces != 0) {
-				putchar(' ');
-				--spaces;
-			}
-			// Output the non-space character.
+
+			// Now we can output whatever it is.
 			putchar(c);
 		}
 	}

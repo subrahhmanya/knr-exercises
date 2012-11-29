@@ -11,9 +11,8 @@
  * worked with and it's not susceptible to scope. Though, in this simple
  * program it really doesn't matter.
  *
- * To be correct, this file should use the isprint() function to ensure that
- * 'column' only gets incremented when a printable character is being read. I'll
- * come back to this when I learn more of the stdlib.
+ * The "correct" solution uses the isprint() stdlib function, but it's not
+ * covered by this point in the book, so I did not use it.
  */
 
 #define TABWIDTH 8

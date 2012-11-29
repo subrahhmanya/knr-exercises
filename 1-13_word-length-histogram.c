@@ -6,18 +6,17 @@
 
 int main(void) {
 	/* Rundown of variables:
-	   c = current input char
-	   state = inside or outside a word
-	   ltrs = letter count
-	   wrds = word count
-	   lines = you should be shot if you don't know
-	   lengths = an array that keeps track of how often words up to x chars long
-	             occur.
-	*/
+	 * i, j = reusable placeholder variables
+	 * state = inside or outside a word
+	 * ltrs = letter count
+	 * wrds = word count
+	 * lines = you should be shot if you don't know
+	 * lengths = an array that keeps track of how often words up to x chars long
+	 *           occur.
+	 */
 
-	int c, state, ltrs, wrds, lines, wlen;
+	int state, ltrs, wrds, lines, wlen, i, j;
 	int lengths[MAXWLENGTH];
-	int i;
 	for (i = 0; i <= MAXWLENGTH; ++i) {
 		lengths[i] = 0;
 	}
@@ -26,9 +25,9 @@ int main(void) {
 	lines = 1;
 	state = OUT;
 	// Capture input until it ends
-	while ((c = getchar()) != EOF) {
+	while ((i = getchar()) != EOF) {
 		// If it's whitespace, we've exited a word
-		if (c == '\n' || c == ' ' || c == '\t') {
+		if (i == '\n' || i == ' ' || i == '\t') {
 			if (state == IN) {
 				++wrds; // ...and should increase the count.
 				state = OUT;
@@ -41,7 +40,7 @@ int main(void) {
 			}
 			/* If it's a new line, we're still out of a word but need to increment the
 			   line count */
-			if (c == '\n') {
+			if (i == '\n') {
 				++lines;
 			}
 		} else {
@@ -59,19 +58,18 @@ int main(void) {
 	}
 
 	printf("\n"); // End the chart heading.
-	int iter;
-	iter = MINWLENGTH;
-	while (iter <= MAXWLENGTH) {
-		i = lengths[iter];
+	j = MINWLENGTH;
+	while (j <= MAXWLENGTH) {
+		i = lengths[j];
 		if (i > 0) {
-			printf("%2d | ", iter);
+			printf("%2d | ", j);
 			while (i > 0) {
 				printf("#");
 				i = i-1;
 			}
 			printf("\n");
 		}
-		++iter;
+		++j;
 	}
 	printf("%d words, %d chars, %d lines.\n", wrds, ltrs, lines);
 	return 0;
