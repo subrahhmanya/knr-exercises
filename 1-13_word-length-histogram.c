@@ -52,8 +52,13 @@ int main(void) {
 		/* Everything that's input counts as a letter. */
 		++ltrs;
 	}
-	// This is ugly and I wish I knew a better way to do it.
-	printf("\nWORD LENGTH FREQUENCY\n\n         5   10   15   20   25   30   35   40   45   50   55   60   65   70   75\n");
+
+	printf("\nWORD LENGTH FREQUENCY\n     ");
+	for (i = 5; i < 80; i += 5) {
+		printf("   %2d", i);
+	}
+
+	printf("\n"); // End the chart heading.
 	int iter;
 	iter = MINWLENGTH;
 	while (iter <= MAXWLENGTH) {
