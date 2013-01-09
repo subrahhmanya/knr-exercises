@@ -1,8 +1,8 @@
-These files are my solutions to Kernighan and Ritchie's *The C Programming 
-Language, 2nd Edition*. My aim is to deepen my understanding of C, using only 
-the concepts covered in content that comes before each exercise. That means no 
-"cheating" by using standard library features that aren't been covered in the 
-book yet. As a result, many of my solutions will probably not be "the best", but 
+These files are my solutions to Kernighan and Ritchie's *The C Programming
+Language, 2nd Edition*. My aim is to deepen my understanding of C, using only
+the concepts covered in content that comes before each exercise. That means no
+"cheating" by using standard library features that aren't covered in the book
+yet. As a result, many of my solutions will probably not be "the best", but
 suitable for the goal at hand: *learning*.
 
 I chose this route because as I was reading the K&R, I didn't feel like I was 
@@ -12,4 +12,5 @@ why was I learning C? I tackled a few exercises and found that I was beginning
 to learn a few things I hadn't ran into before.
 
 Critique is welcome, but please keep in mind the limitations I've outlined in 
-the first paragraph.
+the first paragraph. Also note that some incomplete implementations are noted,
+which I intend on revisiting. Any suggestions and advice are welcome.

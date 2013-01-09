@@ -2,21 +2,6 @@
 
 #define MINLENGTH 80
 
-/* Read as much as possible of a string and return its length. */
-int get_line(char s[]) {
-	int c, i;
-
-	for (i = 0; i < MINLENGTH - 1 && (c = getchar()) != EOF; ++i) {
-		s[i] = c;
-	}
-	if (c == '\n') {
-		s[i] = c;
-		++i;
-	}
-	s[i] = '\0';
-	return i;
-}
-
 int main() {
 	// longline is used as a boolean that tells us if it's a line worth printing
 	int longline = 0;
