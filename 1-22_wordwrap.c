@@ -53,22 +53,22 @@ int b_find_blank(char s[], int lim) {
 
 int main() {
 	while (j = get_line(data, MAXLEN)) {
-			if (j == 80) {
-				// We know it's a long line now. Let's make sure we're breaking in
-				// the right place
-				k = b_find_blank(data, MAXLEN);
-				//printf("%d\n", k);
-				if (k > -1) {
-					data[k] = '\n';
-					data[MAXLEN] = '\0';
-					printf("%s", data);
-					continue;
-				} else {
-					data[MAXLEN] = '\0';
-					printf("%s\n", data);
-					continue;
-				}
+		if (j == 80) {
+			// We know it's a long line now. Let's make sure we're breaking in
+			// the right place
+			k = b_find_blank(data, MAXLEN);
+			//printf("%d\n", k);
+			if (k > -1) {
+				data[k] = '\n';
+				data[MAXLEN] = '\0';
+				printf("%s", data);
+				continue;
+			} else {
+				data[MAXLEN] = '\0';
+				printf("%s\n", data);
+				continue;
 			}
+		}
 		printf("%s", data);
 	}
 
