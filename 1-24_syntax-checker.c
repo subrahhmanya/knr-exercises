@@ -15,135 +15,147 @@
  *
  * I can tackle this one the same way I tackled the previous exercise: with a
  * FSM. The trick is in catching the mismatched levels.
+ *
+ * Post-solution note: switch() would've made this MUCH shorter...
  */
 
-/* Create our nestable counts. These keep track of each type of syntax
- * character. */
-#define PARENS 0
-#define BRACKETS 1
-#define BRACES 2
-
-/* Create our states, which tell the parser what's going on. INSQ, INDQ, and
- * INCM are much larger so it's easier to tell what's what. If I were better
- * versed in binary operations, this could use less RAM. I intend to revisit
- * this later on. */
-#define OUT 0
-#define INPR 1
-#define INBK 2
-#define INBC 3
-#define INSQ 100
-#define INDQ 1000
-#define INCM 10000
-
 char c;
-int counts[3];
-int state, i, linenr;
+
+/* Set the state/count variables */
+int linenr, parens, brackets, braces, singqs, dubqs, escapes, mcomms, scomms = 0;
 
 int main() {
-	for (i = 0; i < 3; ++i) {
-		counts[i] = 0;
-	}
-
-	state = OUT;
 	linenr = 1;
 	// Begin streaming!
 	while ((c = getchar()) != EOF) {
-		if (c == '\n') {
-			linenr += 1;
-			if (state >= INSQ) {
-				break;
+		if (scomms == 1) {
+			if (c == '\n') {
+				scomms--;
+			} else {
+				continue;
 			}
-		}
-		if (c == '(') {
-			counts[PARENS] += 1;
-			state += INPR;
-		}
-		if (c == ')') {
-			counts[PARENS] -= 1;
-			state -= INPR;
-			if (counts[PARENS] < 0) {
-				break;
+		} else if (mcomms == 1) {
+			if (c == '*') {
+				if (getchar() == '/') {
+					mcomms--;
+				}
 			}
-		}
-		if (c == '[') {
-			counts[BRACKETS] += 1;
-			state += INBK;
-		}
-		if (c == ']') {
-			counts[BRACKETS] -= 1;
-			state -= INBK;
-			if (counts[BRACKETS] < 0) {
-				break;
+		} else {
+			// Check for escape sequences
+			if (c == '\\') {
+				escapes++;
+				c = getchar();
+				// This does not detect all sequences; just the ones covered in Chapter 1.
+				if (c != '\\' || c != 't' || c != '\'' || c != '"' || c != 'n' || c != 'b' || c != '0') {
+					break;
+				} else {
+					escapes--;
+				}
 			}
-		}
-		if (c == '{') {
-			counts[BRACES] += 1;
-			state += INBC;
-		}
-		if (c == '}') {
-			counts[BRACES] -= 1;
-			state -= INBC;
-			if (counts[BRACES] < 0) {
-				break;
+			// Newline behavior
+			if (c == '\n') {
+				if (singqs > 0 || dubqs > 0) {
+					break;
+				}
+				linenr += 1;
 			}
-		}
-		if (c == '"' && state > INDQ) {
-			state -= INDQ;
-			if (state < 0) {
-				break;
+			// Parentheses
+			if (c == '(') {
+				parens += 1;
 			}
-		}
-		if (c == '"' && state < INSQ) {
-			state += INDQ;
-			if (state >= (INDQ * 2)) {
-				break;
+			if (c == ')') {
+				parens -= 1;
+				if (parens < 0) {
+					break;
+				}
 			}
-		}
-		if (c == '\'' && state > INSQ && state < INDQ) {
-			state -= INSQ;
-			if (state < 0) {
-				break;
+			// Brackets
+			if (c == '[') {
+				brackets += 1;
 			}
-		}
-		if (c == '\'' && state < INSQ) {
-			state += INSQ;
-			if (state >= (INSQ * 2)) {
-				break;
+			if (c == ']') {
+				brackets--;
+				if (brackets < 0) {
+					break;
+				}
+			}
+			// Braces
+			if (c == '{') {
+				braces++;
+			}
+			if (c == '}') {
+				braces--;
+				if (braces < 0) {
+					break;
+				}
+			}
+			// Double quotes
+			if (c == '"') {
+				if (dubqs == 0) {
+					dubqs++;
+				} else {
+					dubqs--;
+				}
+			}
+			// Single quotes, which are only checked outside of doubles.
+			if (c == '\'' && dubqs == 0) {
+				if (singqs == 0) {
+					singqs++;
+				} else {
+					singqs--;
+				}
+			}
+			// Comment detection
+			if (c == '/') {
+				if (getchar() == '*') {
+					mcomms++;
+				}
+				if (getchar() == '/') {
+					scomms++;
+				}
 			}
 		}
 	}
 
-	if (state != 0) {
-		printf("SYNTAX ERROR: ");
-		
-		if (state >= INSQ && state < INDQ) {
-			printf("Unclosed single quote on line %d!\n", linenr);
-			return 1;
-		}
-		if (counts[PARENS] > 0) {
-			printf("Unclosed parenthesis on line %d!\n", linenr);
-			return 1;
-		}
-		if (counts[PARENS] < 0) {
-			printf("Too many close parentheses on line %d!\n", linenr);
-			return 1;
-		}
-		if (counts[BRACKETS] > 0) {
-			printf("Unclosed brackets on line %d!\n", linenr);
-			return 1;
-		}
-		if (counts[BRACKETS] < 0) {
-			printf("Too many close brackets on line %d!\n", linenr);
-			return 1;
-		}
-		if (counts[BRACES] > 0) {
-			printf("Unclosed braces on line %d!\n", linenr);
-			return 1;
-		}
-		if (counts[BRACES] < 0) {
-			printf("Too many close braces on line %d!\n", linenr);
-			return 1;
-		}
+	if (escapes > 0) {
+		printf("Invalid escape sequence on line %d!\n", linenr);
+		return 1;
+	}
+	if (singqs > 0) {
+		printf("Unclosed single quote on line %d!\n", linenr);
+		return 1;
+	}
+	if (dubqs > 0) {
+		printf("Unclosed double quote on line %d!\n", linenr);
+		return 1;
+	}
+	if (brackets > 0) {
+		printf("Unclosed brackets on line %d!\n", linenr);
+		return 1;
+	}
+	if (brackets < 0) {
+		printf("Too many close brackets on line %d!\n", linenr);
+		return 1;
+	}
+	if (parens > 0) {
+		printf("Unclosed parenthesis on line %d!\n", linenr);
+		return 1;
+	}
+	if (parens < 0) {
+		printf("Too many close parentheses on line %d!\n", linenr);
+		return 1;
+	}
+	if (braces > 0) {
+		printf("Unclosed braces on line %d!\n", linenr);
+		return 1;
+	}
+	if (braces < 0) {
+		printf("Too many close braces on line %d!\n", linenr);
+		return 1;
+	}
+	if (mcomms == 1) {
+		printf("Unclosed comment at end of file!\n");
+		return 1;
 	}
 
 	printf("All clean.\n");
