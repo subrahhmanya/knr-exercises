@@ -46,7 +46,7 @@ int main() {
 				escapes++;
 				c = getchar();
 				// This does not detect all sequences; just the ones covered in Chapter 1.
-				if (c != '\\' || c != 't' || c != '\'' || c != '"' || c != 'n' || c != 'b' || c != '0') {
+				if (c != '\\' && c != 't' && c != '\'' && c != '"' && c != 'n' && c != 'b' && c != '0') {
 					break;
 				} else {
 					escapes--;
@@ -57,11 +57,11 @@ int main() {
 				if (singqs > 0 || dubqs > 0) {
 					break;
 				}
-				linenr += 1;
+				linenr++;
 			}
 			// Parentheses
 			if (c == '(') {
-				parens += 1;
+				parens++;
 			}
 			if (c == ')') {
 				parens -= 1;
@@ -71,7 +71,7 @@ int main() {
 			}
 			// Brackets
 			if (c == '[') {
-				brackets += 1;
+				brackets++;
 			}
 			if (c == ']') {
 				brackets--;
