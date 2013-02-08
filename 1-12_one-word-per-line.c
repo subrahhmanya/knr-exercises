@@ -22,8 +22,10 @@ int main(void) {
 			nl++;
 		}
 		if (c == ' ' || c == '\n' || c == '\t') {
-			state = OUT;
-			putchar('\n');
+			if (state == IN) {
+				state = OUT;
+				putchar('\n');
+			}
 		} else if (state == OUT) {
 			state = IN;
 			nw++;
