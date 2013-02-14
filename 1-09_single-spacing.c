@@ -15,8 +15,10 @@ int main(void) {
 	int spaces = 0;
 
 	while ((c = getchar()) != EOF) {
-		if (c == ' ' && spaces == 0) {
-			putchar(c);
+		if (c == ' ') {
+			if (spaces == 0) {
+				putchar(c);
+			}
 			spaces++;
 		} else {
 			putchar(c);
