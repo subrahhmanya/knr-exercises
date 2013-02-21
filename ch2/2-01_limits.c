@@ -109,17 +109,7 @@ int main() {
 	}
 
 	printf("`float` maximum: %e\n", fll);
-
-	fl = 0.0;
-	fll = 0.0;
-	fla = 0.0;
-	while (fl == 0.0) {
-		fll = fla;
-		fla = fla - 1111e28;
-		fl = (fl - fla) + fla;
-	}
-
-	printf("`float` minimum: %e\n", fll);
+	printf("`float` minimum: %e\n", 0 - fll);
 
 	/* Doubles */
 	while (db == 0.0) {
@@ -129,17 +119,7 @@ int main() {
 	}
 
 	printf("`double` maximum: %e\n", dbl);
-
-	db = 0.0;
-	dbl = 0.0;
-	dba = 0.0;
-	while (db == 0.0) {
-		dbl = dba;
-		dba = dba - 1111e297;
-		db = (db - dba) + dba;
-	}
-
-	printf("`double` minimum: %e\n", dbl);
+	printf("`double` minimum: %e\n", 0 - dbl);
 	
 	printf("\nNow, let's cheat and use the helpful headers!\n");
 	printf("`char`s go from %d to %d (unsigned, up to %u)\n", SCHAR_MIN, SCHAR_MAX, UCHAR_MAX);
