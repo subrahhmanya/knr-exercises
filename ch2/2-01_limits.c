@@ -128,15 +128,25 @@ int main() {
 		db = (db + dba) - dba;
 	}
 
-	printf("`float` maximum: %e\n", dbl);
-	printf("`float` minimum: -%e\n", dbl);
+	printf("`double` maximum: %e\n", dbl);
+
+	db = 0.0;
+	dbl = 0.0;
+	dba = 0.0;
+	while (db == 0.0) {
+		dbl = dba;
+		dba = dba - 1111e297;
+		db = (db - dba) + dba;
+	}
+
+	printf("`double` minimum: %e\n", dbl);
 	
 	printf("\nNow, let's cheat and use the helpful headers!\n");
 	printf("`char`s go from %d to %d (unsigned, up to %u)\n", SCHAR_MIN, SCHAR_MAX, UCHAR_MAX);
 	printf("`short`s go from %d to %d (unsigned, up to %u)\n", SHRT_MIN, SHRT_MAX, USHRT_MAX);
 	printf("`int`s go from %d to %d (unsigned, up to %u)\n", INT_MIN, INT_MAX, UINT_MAX);
 	printf("`long`s go from %ld to %ld (unsigned, up to %lu)\n", LONG_MIN, LONG_MAX, ULONG_MAX);
-	printf("`float`s range from %e to %e\n", FLT_MIN, FLT_MAX);
-	printf("`double`s range from %e to %e\n", DBL_MIN, DBL_MAX);
+	printf("`float`s range from %e to %e\n", 0.0 - FLT_MAX, FLT_MAX);
+	printf("`double`s range from %e to %e\n", 0.0 - DBL_MAX, DBL_MAX);
 	return 0;
 }
