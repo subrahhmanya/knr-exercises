@@ -9,8 +9,9 @@
  *
  * for (i=0; i < lim - 1 && (c = getchar()) != '\n' && c != EOF)
  *     i++;
+ * )
  *
- * Answer: A recursive function should do the job. I think...
+ * Answer: A while loop and a few 'if's should do it.
  *
  */
 
@@ -20,25 +21,20 @@ char test[LIMIT] = "";
 int i = 0;
 int c;
 
-void save_string(char s[]) {
-	if (i < LIMIT - 1) {
+int main() {
+	while (i < LIMIT - 1) {
 		c = getchar();
 		if (c != '\n') {
 			if (c != EOF) {
-				s[i] = c;
+				test[i] = c;
 				i++;
 			} else {
-				return;
+				break;
 			}
 		} else {
-			return;
+			break;
 		}
-		save_string(s);
 	}
-}
-
-int main() {
-	save_string(test);
 	printf("%s\n", test);
 	return 0;
 }
