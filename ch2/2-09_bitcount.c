@@ -7,7 +7,7 @@
  * faster version of bitcount.
  *
  * Answer: Subtracting 1 from a number reverses the rightmost 1 bit and
- * replaces all lower-order bits to 0. So for example:
+ * replaces all lower-order bits to 1. So for example:
  *
  * 110100 (52) minus 1 is
  * 110011 (51)
@@ -22,6 +22,18 @@
  * Why? Because the 2nd operand (51) is only masking off two fields, the 3rd
  * and 4th (which are zeros). The rightmost 1-bit in the 1st operand (52) is
  * in that mask, so it goes poof.
+ *
+ * Oh, and here's the in-book version of bitcount():
+ *
+ * int bitcount(unsigned x) {
+ *     int b;
+ *     for (b = 0; x != 0; x >>= 1) {
+ *         if (x & 01) {
+ *             b++;
+ *         }
+ *     }
+ *     return b;
+ * }
  */
 
 unsigned bitcount(unsigned x) {
