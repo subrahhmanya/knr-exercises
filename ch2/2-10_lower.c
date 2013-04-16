@@ -15,6 +15,6 @@ int lower(int c) {
 
 int main() {
 	char foo = 'F';
-	printf("The follow letter should be lowercase: %c\n", lower(foo));
+	printf("The following letter should be lowercase: %c\n", lower(foo));
 	return 0;
 }
