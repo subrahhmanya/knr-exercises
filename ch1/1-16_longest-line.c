@@ -1,5 +1,16 @@
 #include <stdio.h>
 
+/* The C Programming Language: 2nd Edition
+ *
+ * Exercise 1-16: Revise the main routine of the longest-line program so it
+ * will correctly print the length of arbitrarily long input lines, and as
+ * much as possible of the text.
+ *
+ * Answer: The key to arbitrary limits is buffering. Using a buffer allows you
+ * to tackle a problem in chunks of memory instead of all at once. It's
+ * slightly more complicated, but adds usefulness to a program.
+ */
+
 #define MAXLENGTH 100
 
 int get_line(char s[], int lim) {

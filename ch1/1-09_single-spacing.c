@@ -21,6 +21,7 @@ int main(void) {
 			}
 			spaces++;
 		} else {
+			spaces = 0;
 			putchar(c);
 		}
 	}

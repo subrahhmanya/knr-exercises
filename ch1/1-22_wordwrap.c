@@ -1,16 +1,15 @@
 #include <stdio.h>
 
 /* The C Programming Language: 2nd Edition
- * Exercise 1-22:
- * "Write a program to 'fold' long input lines into two or more shorter lines
- * after the last non-blank character that occurs before the n-th column of
- * input. Make sure your program does something intelligent with very long
- * lines, and if there are no blanks or tabs before the specified column."
  *
- * So... Quite a hefty requirement. In a nutshell, our goal is to create sane
- * hard-wrapping. This is a common function in text editors, and it's
- * important to get it right or the results are wonky.
+ * Exercise 1-22: Write a program to 'fold' long input lines into two or more
+ * shorter lines after the last non-blank character that occurs before the n-th
+ * column of input. Make sure your program does something intelligent with very
+ * long lines, and if there are no blanks or tabs before the specified column.
  *
+ * Answer: So... Quite a hefty requirement. In a nutshell, our goal is to
+ * create sane hard-wrapping. This is a common function in text editors, and
+ * it's important to get it right or the results are wonky.
  *
  * TODO: get_line() is not fully correct. When it hits a \t, it counts it as
  * one character and has no concept of display count. I'll fix this later on.

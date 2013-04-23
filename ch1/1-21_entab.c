@@ -1,15 +1,14 @@
 #include <stdio.h>
 
 /* The C Programming Language: 2nd Edition
- * Exercise 1-21:
- * "Write a program `entab` that replaces strings of blanks by the minimum
- * number of tabs and blanks to achieve the same spacing. Use the same tab
- * stops as for `detab`. When either a tab or a single blank would suffice to
- * reach a tab stop, which should be given preference?"
+ *
+ * Exercise 1-21: Write a program `entab` that replaces strings of blanks by
+ * the minimum number of tabs and blanks to achieve the same spacing. Use the
+ * same tab stops as for `detab`. When either a tab or a single blank would
+ * suffice to reach a tab stop, which should be given preference?
  *
  * Answer: A blank. A tab character that comes after (tabstop - 1) blanks makes
  * little-to-no sense and could mess up alignment in some environments.
- *
  */
 
 #define TABWIDTH 8

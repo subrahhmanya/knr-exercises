@@ -1,4 +1,23 @@
 #include <stdio.h>
+
+/* The C Programming Language: 2nd Edition
+ *
+ * Exercise 1-13: Write a program to print a histogram of the lengths of words
+ * in its input. It is easy to draw the histogram with the bars horizontal; a
+ * vertical orientation is more challenging.
+ *
+ * Answer: Keep an array of lengths that you can add to when you come out of a
+ * word. At the end of input, you'll have your collection of data. The rest is
+ * deciding how you want to display it. I chose a horizontal layout for this
+ * exercise.
+ *
+ * To do the vertical, you need to choose a theoretical maximum (80 is probably
+ * a bit too high) and simply iterate over the data set checking for the word
+ * length that has that frequency or lower.
+ *
+ * TODO: Write the vertical histogram code.
+ */
+
 #define IN 1
 #define OUT 0
 #define MINWLENGTH 2

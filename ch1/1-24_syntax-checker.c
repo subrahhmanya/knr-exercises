@@ -1,22 +1,27 @@
 #include <stdio.h>
 
 /* The C Programming Language: 2nd Edition
- * Exercise 1-24:
- * "Write a program to check a C program for rudimentary syntax errors like
- * unbalanced parentheses, brackets, and braces. Don't forget about quotes, both
- * single and double, escape sequences, and comments. (This program is hard if
- * you do it in full generality.)"
  *
- * Proksima from Freenode's ##c helped me understand full generality where
- * Ixquick, Wikipedia, and StackOverflow all failed: a program that has full
- * generality handles all use cases. In this case, my program should report no
- * errors from a well formed C source file, and return correct errors for every
- * non-valid C source file.
+ * Exercise 1-24: Write a program to check a C program for rudimentary syntax
+ * errors like unbalanced parentheses, brackets, and braces. Don't forget about
+ * quotes, both single and double, escape sequences, and comments. (This
+ * program is hard if you do it in full generality.)
+ *
+ * Answer: Proksima from Freenode's ##c helped me understand full generality
+ * where Ixquick, Wikipedia, and StackOverflow all failed: a program that has
+ * full generality handles all use cases. In this case, my program should
+ * report no errors from a well formed C source file, and return correct errors
+ * for every non-valid C source file.
  *
  * I can tackle this one the same way I tackled the previous exercise: with a
- * FSM. The trick is in catching the mismatched levels.
+ * FSM. The trick is in catching the mismatched levels. This happens when,
+ * after the source has been combed, there are values that aren't equal to
+ * zero. Anything that's non-zero means there are too many or too few of a
+ * specific syntax construct.
  *
- * Post-solution note: switch() would've made this MUCH shorter...
+ * Post-solution note: switch() would've made this MUCH shorter... but it's not
+ * covered until chapter 3. I think part of the purpose of this exercise is to
+ * teach the value of the switch structure later on. :)
  */
 
 char c;

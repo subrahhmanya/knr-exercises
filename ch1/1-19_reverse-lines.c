@@ -1,5 +1,24 @@
 #include <stdio.h>
 
+/* The C Programming Language: 2nd Edition
+ *
+ * Exercise 1-19: Write a function reverse(s) that reverses the character
+ * string 's'. Use it to write a program that reverses its input a line at a
+ * time.
+ *
+ * Answer: This is really just as simple as using get_line() and reverse() in
+ * tandem. I guess the point of this exercise is to teach the reader how to
+ * combine the use of functions to get more complex behavior out of a program.
+ *
+ * My version includes the size of the string in the argument list instead of
+ * duplicating effort that get_line() does, since it already puts the contents
+ * into a string and returns the length of the string for me. For strict
+ * passing of this exercise, reverse() should really only have one argument
+ * and it should count the size of the string before it works with it. But
+ * that's prone to issues, such as a string that hasn't been terminated
+ * properly.
+ */
+
 #define MAXLINELENGTH 9001
 
 int get_line(char s[], int limit) {

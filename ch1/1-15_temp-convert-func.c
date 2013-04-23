@@ -1,5 +1,19 @@
 #include <stdio.h>
 
+/* The C Programming Language: 2nd Edition
+ *
+ * Exercise 1-15: Rewrite the temperature conversion program of Section 1.2 to
+ * use a function for conversion.
+ *
+ * Answer: This exercise teaches you the purpose of functions: to perform
+ * specific operations that can be reused. Writing good functions is the
+ * foundation of good programming. Without functions, programming would still
+ * be in its version of the stone age.
+ *
+ * In the case of temperature conversion, all you really need to do is
+ * outsource the math to a function and return the result.
+ */
+
 #define MAX_F 300.0
 #define STEP 20.0
 

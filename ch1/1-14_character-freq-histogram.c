@@ -1,4 +1,16 @@
 #include <stdio.h>
+
+/* The C Programming Language: 2nd Edition
+ *
+ * Exercise 1-14: Write a program to print a histogram of the frequencies of
+ * different characters in its input.
+ *
+ * Answer: Using an array of characters (hint: that's what a string is) with
+ * an array of ints is a good way to pair them up for counting. The 'i'
+ * iterator variable ties to both so that lengths[i] represents the count for
+ * chars[i].
+ */
+
 int main(void) {
 	/* Rundown of variables:
 	   c = current input char
