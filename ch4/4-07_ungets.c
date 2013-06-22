@@ -2,24 +2,18 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <math.h>
+#include <string.h>
 
 /* The C Programming Language: 2nd Edition
  *
- * Exercise 4-6: Add commands for handling variables. (It's easy to provide
- * twenty-six variables with single-letter names.) Add a variable for the most
- * recently printed value.
+ * Exercise 4-7: Write a routine ungets(s) that will push back an entire
+ * string onto the input. Should ungets() know about `buf` and `bufp`, or
+ * should it just use ungetch?
  *
- * Answer: I'm not sure if I found the "easy" way to do a bunch of variables.
- * The knowledge of ASCII I gained earlier in the book let me know that 'a'
- * minus 'a' == 0, and thus I used an array of doubles to do my bidding, using
- * the appropriate math. Add a few extra things to the '\n' command case, and
- * it pretty much wrote itself.
- *
- * One glaring limitation is the fact that you *must* put the variable letter
- * directly after the '=' command or it won't assign it to anything. I could
- * add another loop to account for this but I really see no need, since you
- * should know which variable you're assigning to. It differentiates it from
- * inline variables, too.
+ * Answer: Ideally, ungets() should know about bufp and BUFSIZE so it can
+ * determine if the string can even fit into the buffer before it bothers
+ * copying it. From there, it can send data to ungetch() without duplicating
+ * effort.
  */
 
 #define MAXOP    100
@@ -32,6 +26,7 @@ void push(double);
 double pop(void);
 int getch(void);
 void ungetch(int);
+void ungets(char []);
 void stack_top(void);
 double dupe_top(void);
 void swap_top_two(void);
@@ -226,6 +221,19 @@ void ungetch(int c) {
 		printf("ungetch: Too many characters.\n");
 	} else {
 		buf[bufp++] = c;
+	}
+}
+
+/* Handle entire strings being pushed back. */
+void ungets(char s[]) {
+	int i;
+	int len = strlen(s);
+	if (len + bufp >= BUFSIZE) {
+		printf("ungets: String too large to fit into buffer.\n");
+	} else {
+		for (i = 0; i < len; i++) {
+			ungetch(s[i]);
+		}
 	}
 }
 
