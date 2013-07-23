@@ -8,67 +8,80 @@
  * long lines, and if there are no blanks or tabs before the specified column.
  *
  * Answer: So... Quite a hefty requirement. In a nutshell, our goal is to
- * create sane hard-wrapping. This is a common function in text editors, and
- * it's important to get it right or the results are wonky.
+ * create line-wrapping. The simplest approach is to take every character until
+ * EOF, like a stream. Spaces and tabs need special treatment. If your input
+ * isn't a newline or a blank, it will just be printed. Spaces and tabs only
+ * print if the next non-blank is before the end of the line length limit. To
+ * make things prettier, I opted to ignore leading whitespace as well.
  *
- * TODO: get_line() is not fully correct. When it hits a \t, it counts it as
- * one character and has no concept of display count. I'll fix this later on.
  */
 
-// For tradition's sake, let's wrap at 80 columns
-#define MAXLEN 80
-
-char data[MAXLEN];
-int i, j, k;
-
-int get_line(char s[], int lim) {
-	/* Put as much as possible into a temp string, and count its length */
-	int c, i;
-
-	for (i = 0; i < lim && (c = getchar()) != EOF && c != '\n'; ++i) {
-		s[i] = c;
-	}
-	if (c == '\n') {
-		s[i] = c;
-		++i;
-	}
-	s[i] = '\0';
-	return i;
-}
-
-/* Find the first blank character, starting from the end of the string. Returns
- * the position of the blank, or -1 if one wasn't found.
- */
-int b_find_blank(char s[], int lim) {
-	// Start at the end of the string and go backwards.
-	for (i = lim; i >= 0; i--) {
-		// Simply replace the first blank with a newline.
-		if (s[i] == ' ' || s[i] == '\t') {
-			return i;
-		}
-	}
-	return -1;
-}
+#define LINEWIDTH 20
 
 int main() {
-	while (j = get_line(data, MAXLEN)) {
-		if (j == 80) {
-			// We know it's a long line now. Let's make sure we're breaking in
-			// the right place
-			k = b_find_blank(data, MAXLEN);
-			//printf("%d\n", k);
-			if (k > -1) {
-				data[k] = '\n';
-				data[MAXLEN] = '\0';
-				printf("%s", data);
-				continue;
-			} else {
-				data[MAXLEN] = '\0';
-				printf("%s\n", data);
+	int c, tmp, ts;
+	int spaces = 0;
+	int col = 0;
+
+	printf("Just type. It'll wrap to %d characters per line.\n", LINEWIDTH);
+	while ((c = getchar()) != EOF) {
+		if (col >= LINEWIDTH) {
+			putchar('\n');
+			col = 0;
+		}
+		if (c == ' ') {
+			if (col == 0) {
 				continue;
 			}
+			spaces = 1;
+			while ((tmp = getchar()) == ' ') {
+				spaces++;
+			}
+			if (col + spaces < LINEWIDTH) {
+				while (spaces > 0) {
+					putchar(' ');
+					col++;
+					spaces--;
+				}
+			} else {
+				putchar('\n');
+				col = 0;
+			}
+			putchar(tmp);
+			col++;
+			continue;
 		}
-		printf("%s", data);
+		/* There's some duplicated effort in here, but I couldn't find a cleaner
+		 * way to put tab stuff in with the spaces, where it belongs */
+		if (c == '\t') {
+			if (col == 0) {
+				continue;
+			}
+			spaces = 1;
+			while ((tmp = getchar()) == '\t') {
+				spaces++;
+			}
+			ts = (spaces * 8) - (col % 8);
+			if (col + ts < LINEWIDTH) {
+				spaces = (spaces * 8) - (col % 8);
+				while (spaces > 0) {
+					putchar(' ');
+					spaces--;
+					col++;
+				}
+			} else {
+				putchar('\n');
+				col = 0;
+			}
+			putchar(tmp);
+			col++;
+			continue;
+		}
+		putchar(c);
+		col++;
+		if (c == '\n') {
+			col = 0;
+		}
 	}
-
+	return 0;
 }
