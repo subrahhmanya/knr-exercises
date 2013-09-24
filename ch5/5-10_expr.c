@@ -34,7 +34,6 @@ int main(int argc, char *argv[]) {
 	int argp; // current argument position
 	double op2;
 	for (argp = 1; argp < argc; argp++) {
-		printf("checking arg: %s\n", argv[argp]);
 		int argtype = opt_type(argv[argp]);
 		switch(argtype) {
 			case '*':
@@ -56,11 +55,9 @@ int main(int argc, char *argv[]) {
 				}
 				break;
 			case NUMBER:
-				printf("it's a number\n");
 				push(atof(argv[argp]));
 				break;
 		}
-		printf("%s\n", argv[argp]);
 	}
 	printf("%f\n", pop());
 }
@@ -70,7 +67,6 @@ void push(double num) {
 		printf("Cannot push: stack full.\n");
 		return;
 	}
-	printf("add %f to stack.\n", num);
 	*(++stp) = num;
 }
 
