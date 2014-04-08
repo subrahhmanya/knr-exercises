@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 /* The C Programming Language: 2nd Edition
  *
- * Exercise 5-14: Modify the sort program to handle a -r flag, which
- * indicates sorting in reverse (decreasing) order. Be sure that -r works
- * with -n.
+ * Exercise 5-15: Add the option -f to fold upper and lower case together, so
+ * that case distinctions are not made during sorting; for example, a and A
+ * compare equal.
  */
 
 #define MAXLINES 5000
@@ -25,6 +26,8 @@ void writelines(char *lineptr[], int nlines);
 void reverse_set(char *lineptr[], int nlines);
 void my_qsort(void *lineptr[], int left, int right, int (*comp)(const char *, const char *));
 int numcmp(const char *, const char *);
+void line_tolower(char *s);
+int istrcmp(const char *, const char *);
 
 void my_qsort(void *v[], int left, int right, int (*comp)(const char *, const char *)) {
 	int i, last;
@@ -100,6 +103,24 @@ void reverse_set(char *lineptr[], int nlines) {
 	}
 }
 
+/* Lowercase the entire line */
+void line_tolower(char *s) {
+	int i;
+	for (i = 0; s[i] != '\0'; i++) {
+		s[i] = tolower(s[i]);
+	}
+}
+
+/* Ignore character case, then send results to qsort */
+int istrcmp(const char *s1, const char *s2) {
+	for ( ; tolower(*s1) == tolower(*s2); s1++, s2++) {
+		if (*s1 == '\0') {
+			return 0;
+		}
+	}
+	return tolower(*s1) - tolower(*s2);
+}
+
 int mygetline(char *line, int lim) {
 	int c, i;
 	for (i = 0; i < lim && (c = getchar()) != EOF && c != '\n'; i++) {
@@ -127,6 +148,7 @@ int main (int argc, char *argv[]) {
 	int nlines;        /* number of input lines read */
 	int numeric = 0;   /* 1 if numeric sort */
 	int reverse = 0;   /* 1 if reverse sort */
+	int fold = 0;      /* 1 if folding upper and lower case */
 
 	if (argc > 1) {
 		int i;
@@ -135,11 +157,15 @@ int main (int argc, char *argv[]) {
 				numeric = 1;
 			} else if (strcmp(argv[i], "-r") == 0) {
 				reverse = 1;
+			} else if (strcmp(argv[i], "-f") == 0) {
+				fold = 1;
 			}
 		}
 	}
 	if ((nlines = readlines(lineptr, MAXLINES)) >= 0) {
-		my_qsort((void **) lineptr, 0, nlines - 1, (int (*)(const char *, const char *))(numeric ? numcmp : strcmp));
+		/* The trick is to chain inline if-statements. This will point to the correct
+		function for comparison, which powers my_qsort */
+		my_qsort((void **) lineptr, 0, nlines - 1, (int (*)(const char *, const char *))(numeric ? numcmp : (fold ? istrcmp : strcmp)));
 		if (reverse == 1) {
 			reverse_set(lineptr, nlines - 1);
 		}
