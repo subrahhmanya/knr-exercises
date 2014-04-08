@@ -26,7 +26,6 @@ void writelines(char *lineptr[], int nlines);
 void reverse_set(char *lineptr[], int nlines);
 void my_qsort(void *lineptr[], int left, int right, int (*comp)(const char *, const char *));
 int numcmp(const char *, const char *);
-void line_tolower(char *s);
 int istrcmp(const char *, const char *);
 
 void my_qsort(void *v[], int left, int right, int (*comp)(const char *, const char *)) {
@@ -100,14 +99,6 @@ void reverse_set(char *lineptr[], int nlines) {
 		if (i < nlines) {
 			swap((void **)lineptr, i, j);
 		}
-	}
-}
-
-/* Lowercase the entire line */
-void line_tolower(char *s) {
-	int i;
-	for (i = 0; s[i] != '\0'; i++) {
-		s[i] = tolower(s[i]);
 	}
 }
 
