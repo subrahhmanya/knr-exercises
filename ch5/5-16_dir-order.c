@@ -162,16 +162,26 @@ int main (int argc, char *argv[]) {
 	int nlines;        /* number of input lines read */
 
 	if (argc > 1) {
-		int i;
-		for (i = 1; --argc; i++) {
-			if (strcmp(argv[i], "-n") == 0) {
-				numeric = 1;
-			} else if (strcmp(argv[i], "-r") == 0) {
-				reverse = 1;
-			} else if (strcmp(argv[i], "-f") == 0) {
-				fold = 1;
-			} else if (strcmp(argv[i], "-d") == 0) {
-				dir = 1;
+		int i, j;
+		for (i = 1, j = 0; --argc; i++) {
+			if (argv[i][j++] == '-') {
+				while (argv[i][j] != '\0') {
+					switch(argv[i][j]) {
+						case 'n':
+							numeric = 1;
+							break;
+						case 'r':
+							reverse = 1;
+							break;
+						case 'f':
+							fold = 1;
+							break;
+						case 'd':
+							dir = 1;
+							break;
+					}
+					j++;
+				}
 			}
 		}
 	}
