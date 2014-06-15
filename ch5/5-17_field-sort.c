@@ -5,33 +5,48 @@
 
 /* The C Programming Language: 2nd Edition
  *
- * Exercise 5-16: Add the -d ("directory order") option, which makes
- * comparisons only on letters, numbers, and blanks. Make sure it works in
- * conjunction with -f.
+ * Exercise 5-17: Add a field-handling capability, so sorting may be done on
+ * fields within lines, each field sorted according to an independent set of
+ * options. (The index of this book was sorted with -df for the index
+ * category and -s for the page numbers.)
+ *
+ * Notes: The directions for this exercise are ambiguous. Given that this book
+ * is meant to teach and keep things mostly simple, I opted for a program that
+ * allows you to sort its input by a single field, using any sorting option
+ * previously available. For the index, then, this program would need to be
+ * ran multiple times to get the desired result. Sorting multiple ways at once
+ * on different fields at once is a complexity level far beyond what's been
+ * covered at this point in the book, so I don't think that was the intended
+ * goal. Enough jabbering; code time!
  */
 
-#define MAXLINES 5000
-char *lineptr[MAXLINES];
 
+#define MAXLINES 5000
 #define MAXLEN 1000
 #define DEFAULT_LINES 10
 #define ALLOCSIZE 10000000
+#define DELIMITER '\t'
 
+char *lineptr[MAXLINES];
 static char allocbuf[ALLOCSIZE];
 static char *allocp = allocbuf;
-char *alloc(int);
 int numeric = 0;   /* 1 if numeric sort */
 int reverse = 0;   /* 1 if reverse sort */
 int fold = 0;      /* 1 if folding upper and lower case */
 int dir = 0;       /* 1 if directory order */
+int fieldnum = 0;  /* Field to sort by, starting with 0. (This only gets used with -F) */
 
-int readlines(char *lineptr[], int nlines);
-void writelines(char *lineptr[], int nlines);
-void reverse_set(char *lineptr[], int nlines);
-void my_qsort(void *lineptr[], int left, int right, int (*comp)(const char *, const char *));
-int numcmp(const char *, const char *);
+char *alloc(int);
+int field_len(const char *);
+int field_start(const char *, int);
+int fieldcmp(const char *, const char *);
 int istrcmp(const char *, const char *);
-int dirstrcmp(const char *, const char *);
+int mystrcmp(const char *, const char *);
+int numcmp(const char *, const char *);
+int readlines(char *lineptr[], int nlines);
+void my_qsort(void *lineptr[], int left, int right, int (*comp)(const char *, const char *));
+void reverse_set(char *lineptr[], int nlines);
+void writelines(char *lineptr[], int nlines);
 
 int mygetline(char *line, int lim) {
 	int c, i;
@@ -67,7 +82,6 @@ void my_qsort(void *v[], int left, int right, int (*comp)(const char *, const ch
 
 int numcmp(const char *s1, const char *s2) {
 	double v1, v2;
-
 	v1 = atof(s1);
 	v2 = atof(s2);
 	if (v1 < v2) {
@@ -81,7 +95,6 @@ int numcmp(const char *s1, const char *s2) {
 
 void swap(void *v[], int i, int j) {
 	void *temp;
-
 	temp = v[i];
 	v[i] = v[j];
 	v[j] = temp;
@@ -148,6 +161,55 @@ int mystrcmp(const char *s1, const char *s2) {
 	return (fold ? (tolower(*s1) - tolower(*s2)) : (*s1 - *s2));
 }
 
+int field_start(const char *s, int fieldnum) {
+	if (fieldnum == 0) {
+		return 0;
+	}
+	int i;
+	for (i = 0; s[i] != '\0'; i++) {
+		if (s[i] == DELIMITER) {
+			fieldnum--;
+			if (fieldnum == 0) {
+				if (s[i+1] != '\0') {
+					return i+1;
+				}
+			}
+		}
+	}
+	return -1;
+}
+
+int field_len(const char *s) {
+	int i = 0;
+	while (s[i] != '\0') {
+		if (s[i] == DELIMITER) {
+			return i;
+		}
+		i++;
+	}
+	return i; /* If we reach the end of the string, we should return */
+}
+
+/* Produces substring copies of the fields to be compared, then hands it off
+ * to a comparison function.
+ */
+int fieldcmp(const char *s1, const char *s2) {
+	char tmp1[MAXLEN];
+	char tmp2[MAXLEN];
+	int start1 = field_start(s1, fieldnum);
+	int start2 = field_start(s2, fieldnum);
+	int len1 = field_len(s1 + start1);
+	int len2 = field_len(s2 + start2);
+	/* It should be safe to use strncpy here since we've established the
+	 * boundaries of the field within the extant source strings
+	 */
+	strncpy(tmp1, s1 + start1, len1);
+	tmp1[len1] = '\0';
+	strncpy(tmp2, s2 + start2, len2);
+	tmp2[len2] = '\0';
+	return (numeric ? numcmp(tmp1, tmp2) : (fold || dir) ? mystrcmp(tmp1, tmp2) : strcmp(tmp1, tmp2));
+}
+
 char *alloc(int n) {
 	if (allocbuf + ALLOCSIZE - allocp >= n) {
 		allocp += n;
@@ -160,7 +222,6 @@ char *alloc(int n) {
 /* sort input lines */
 int main(int argc, char *argv[]) {
 	int nlines;        /* number of input lines read */
-
 	if (argc > 1) {
 		int i, j;
 		for (i = 1, j = 0; --argc; i++) {
@@ -179,6 +240,11 @@ int main(int argc, char *argv[]) {
 						case 'd':
 							dir = 1;
 							break;
+						case 'F':
+							if (isdigit(argv[i][++j])) {
+								fieldnum = (argv[i][j] - '0');
+							}
+							break;
 					}
 					j++;
 				}
@@ -188,7 +254,7 @@ int main(int argc, char *argv[]) {
 	if ((nlines = readlines(lineptr, MAXLINES)) >= 0) {
 		/* The trick is to chain inline if-statements. This will point to the correct
 		function for comparison, which powers my_qsort */
-		my_qsort((void **) lineptr, 0, nlines - 1, (int (*)(const char *, const char *))(numeric ? numcmp : (fold ? mystrcmp : (dir ? mystrcmp : strcmp))));
+		my_qsort((void **) lineptr, 0, nlines - 1, (int (*)(const char *, const char *))(fieldnum >= 0 ? fieldcmp : (numeric ? numcmp : (fold || dir ? mystrcmp : strcmp))));
 		if (reverse == 1) {
 			reverse_set(lineptr, nlines - 1);
 		}
