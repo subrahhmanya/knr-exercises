@@ -10,6 +10,9 @@
  */
 
 int main(void) {
-	printf("Hello world! \d\n");
+	/* Uncomment the next line for an invalid escape character! */
+	/*printf("Hello world! \d\n");*/
+	/* Compare with a valid one: */
+	printf("Hello world! \t\n");
 	return 0;
 }
