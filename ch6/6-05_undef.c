@@ -5,7 +5,7 @@
 /* The C Programming Language: 2nd Edition
  *
  * Exercise 6-5: Write a function `undef` that will remove a name and
- * definition from the table maintai\ed by lookup() and install().
+ * definition from the table maintained by lookup() and install().
  *
  * Notes: since undef() operates on the same data structure as lookup()
  * and install(), I chose to depend on lookup() to find the correct node
@@ -27,7 +27,6 @@ unsigned hash(char *);
 struct nlist *install(char *, char *);
 struct nlist *lookup(char *);
 int undef(char *);
-void print_table(struct nlist *);
 
 int main(int argc, char **argv) {
 	/* Install a few words */
